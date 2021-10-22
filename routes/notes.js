@@ -23,7 +23,7 @@ notes.post('/', (req, res) => {
       text
     };
 
-    readAndAppend(newNote, '../develop/db/db.json');
+    readAndAppend(newNote, '../db/db.json');
     res.json(`Note added successfully 🚀`);
   } else {
     res.error('Error in adding note');
@@ -33,7 +33,7 @@ notes.post('/', (req, res) => {
 notes.delete('/', (req, res) => {
     console.info(`${req.method} request received to delete a note`);
       console.log("id: " + req.query.id);
-      readAndDelete(req.query.id, '../develop/db/db.json');
+      readAndDelete(req.query.id, '../db/db.json');
       res.json(`Note deleted successfully 🚀`);
 
   });
