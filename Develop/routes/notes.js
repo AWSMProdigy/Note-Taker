@@ -1,11 +1,11 @@
 const notes = require('express').Router();
-const { readFromFile, readAndAppend } = require('../helpers/fsUtils');
+const { readFromFile, readAndAppend, readAndDelete } = require('../helpers/fsUtils');
 const uuid = require('../helpers/uuid');
 
 
 // GET Route for retrieving all the tips
 notes.get('/', (req, res) => {
-  console.info(`${req.method} request received for tips`);
+  console.info(`${req.method} request received for notes`);
   readFromFile('./db/db.json').then((data) => res.json(JSON.parse(data)));
 });
 
@@ -14,13 +14,13 @@ notes.post('/', (req, res) => {
   console.info(`${req.method} request received to add a note`);
   console.log(req.body);
 
-  const { title, note} = req.body;
+  const { title, text} = req.body;
 
   if (req.body) {
     const newNote = {
+      id: uuid(),
       title,
-      note,
-      tip_id: uuid(),
+      text
     };
 
     readAndAppend(newNote, '../develop/db/db.json');
@@ -29,5 +29,13 @@ notes.post('/', (req, res) => {
     res.error('Error in adding note');
   }
 });
+
+notes.delete('/', (req, res) => {
+    console.info(`${req.method} request received to delete a note`);
+      console.log("id: " + req.query.id);
+      readAndDelete(req.query.id, '../develop/db/db.json');
+      res.json(`Note deleted successfully 🚀`);
+
+  });
 
 module.exports = notes;
